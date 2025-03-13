@@ -442,10 +442,11 @@
     }
 
     .team-card {
-      flex: 1;
-      background-color: var(--black);
+      text-align: center;
+      background-color: var(--dark-gray);
       border-radius: 15px;
       overflow: hidden;
+      padding: 30px;
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
@@ -455,41 +456,23 @@
     }
 
     .team-img {
-      height: 300px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
       background-position: center;
       background-size: cover;
-      position: relative;
+      border: 5px solid var(--yellow);
+      transition: transform 0.3s;
     }
 
-    .team-img::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 30%;
-      background: linear-gradient(to top, var(--black), transparent);
-    }
-
-    .team-info {
-      padding: 25px;
-      position: relative;
-    }
-
-    .team-info::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 3px;
-      background-color: var(--yellow);
+    .team-card:hover .team-img {
+      transform: scale(1.05);
     }
 
     .team-name {
       font-size: 1.5rem;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       color: var(--yellow);
     }
 
@@ -497,7 +480,6 @@
       font-size: 1rem;
       color: #ccc;
       margin-bottom: 15px;
-      font-style: italic;
     }
 
     /* Footer */
@@ -794,16 +776,11 @@
       <div class="section-title animate">
         <h2>OUR TEAM</h2>
       </div>
-      
-        
-        <div class="team-card">
-          <div class="team-img" style="background-image: url('Images/About us .png')"></div>
-          <div class="team-info">
-            <h3 class="team-name">Noel Shaba</h3>
-            <p class="team-position">Business Development and Operations Manager</p>
-            <p>Noel brings extensive experience in business growth, supply chain, and operations within the mining industry. He plays a key role in expanding market reach, optimizing efficiency, and building strong client relationships, ensuring Apex Mining Solutions delivers reliable and high-quality solutions to the industry.</p>
-          </div>
-        </div>
+      <div class="team-card animate">
+        <div class="team-img" style="background-image: url('Images/new noel.jpg')"></div>
+        <h3 class="team-name">Noel Shaba</h3>
+        <p class="team-position">Business Development and Operations Manager</p>
+        <p class="card-text">Brings extensive experience in business growth, supply chain, and operations within the mining industry.</p>
       </div>
     </div>
   </section>

@@ -688,21 +688,21 @@
           <div class="card-img" style="background-image: url('/Images/Mining courasel.jpg')"></div>
           <div class="card-content">
             <h3 class="card-title">Industry Expertise</h3>
-            <p class="card-text">Deep understanding of mining operational needs backed by years of experience in the field.</p>
+            
           </div>
         </div>
         <div class="card animate">
           <div class="card-img" style="background-image: url('/Images/Africa mining.jpg')"></div>
           <div class="card-content">
             <h3 class="card-title">Quality Assurance</h3>
-            <p class="card-text">Products sourced from certified global manufacturers with rigorous quality control.</p>
+            
           </div>
         </div>
         <div class="card animate">
           <div class="card-img" style="background-image: url('/Images/supplies.jpg')"></div>
           <div class="card-content">
             <h3 class="card-title">Reliable Supply Chain</h3>
-            <p class="card-text">Efficient logistics and inventory management to minimize downtime and ensure continuity.</p>
+            
           </div>
         </div>
       </div>
@@ -717,7 +717,7 @@
       </div>
       
         <div class="team-card animate">
-          <div class="team-img" style="background-image: url('/api/placeholder/200/200?text=Noel')"></div>
+          <div class="team-img" style="background-image: url('Images/new noel.jpg')"></div>
           <h3 class="team-name">Noel Shaba</h3>
           <p class="team-position">Business Development and Operations Manager</p>
           <p class="card-text">Brings extensive experience in business growth, supply chain, and operations within the mining industry.</p>
@@ -790,107 +790,115 @@
     </div>
   </footer>
    <script>
-    // Existing animation script
-    document.addEventListener('DOMContentLoaded', function() {
-      const animatedElements = document.querySelectorAll('.animate');
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeIn 1s ease forwards';
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      
-      animatedElements.forEach(element => {
-        observer.observe(element);
-      });
-
-      // Completely rewritten typing animation script to fix cycling issues
-      const typingElement = document.querySelector('.typing-text');
-      const phrases = [
-        "Personal Protective Equipment (PPE)",
-        "Mechanical Engineering Spares",
-        "Laboratory Items & Reagents",
-        "Electrical Spares",
-        "Instrumentation Spares"
-      ];
-      
-      // Animation configuration
-      const config = {
-        typingDelay: 150,           // Delay between characters when typing
-        deletingDelay: 75,          // Delay between characters when deleting
-        pauseBeforeDelete: 5000,    // How long to pause at full phrase
-        pauseBeforeNewPhrase: 1000  // Pause between phrases
-      };
-      
-      let currentPhraseIndex = 0;
-      
-      // Main function to handle the complete cycle for one phrase
-      function animatePhrase(phraseIndex) {
-        const phrase = phrases[phraseIndex];
-        
-        // Step 1: Type the phrase
-        typePhrase(phrase, 0, function() {
-          // Step 2: Wait at complete phrase
-          setTimeout(function() {
-            // Step 3: Delete the phrase
-            deletePhrase(phrase, phrase.length, function() {
-              // Step 4: Move to next phrase
-              currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
-              
-              // Pause before starting the next phrase
-              setTimeout(function() {
-                animatePhrase(currentPhraseIndex);
-              }, config.pauseBeforeNewPhrase);
-            });
-          }, config.pauseBeforeDelete);
-        });
+   document.addEventListener('DOMContentLoaded', function() {
+  // Handle regular animated elements
+  const animatedElements = document.querySelectorAll('.animate');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeIn 1s ease forwards';
+        observer.unobserve(entry.target);
       }
-      
-      // Function to type a phrase character by character
-      function typePhrase(phrase, charIndex, callback) {
-        if (charIndex <= phrase.length) {
-          typingElement.textContent = phrase.substring(0, charIndex);
-          
-          // Calculate next delay - pause longer at punctuation
-          let nextDelay = config.typingDelay;
-          if (charIndex > 0 && (phrase.charAt(charIndex - 1) === ',' || 
-                                phrase.charAt(charIndex - 1) === '.' || 
-                                phrase.charAt(charIndex - 1) === ' ' ||
-                                phrase.charAt(charIndex - 1) === '(')) {
-            nextDelay = config.typingDelay * 2.5;
-          }
-          
-          setTimeout(function() {
-            typePhrase(phrase, charIndex + 1, callback);
-          }, nextDelay);
-        } else {
-          // Typing complete, trigger callback
-          if (callback) callback();
-        }
-      }
-      
-      // Function to delete a phrase character by character
-      function deletePhrase(phrase, charIndex, callback) {
-        if (charIndex >= 0) {
-          typingElement.textContent = phrase.substring(0, charIndex);
-          
-          setTimeout(function() {
-            deletePhrase(phrase, charIndex - 1, callback);
-          }, config.deletingDelay);
-        } else {
-          // Deletion complete, trigger callback
-          if (callback) callback();
-        }
-      }
-      
-      // Start the animation after a delay
-      setTimeout(function() {
-        animatePhrase(currentPhraseIndex);
-      }, 1500);
     });
+  }, { threshold: 0.1 });
+  
+  animatedElements.forEach(element => {
+    observer.observe(element);
+  });
+
+  // New fade animation for phrases instead of typing
+  const typingElement = document.querySelector('.typing-text');
+  const phrases = [
+    "Personal Protective Equipment (PPE)",
+    "Mechanical Engineering Spares",
+    "Laboratory Items & Reagents",
+    "Electrical Spares",
+    "Instrumentation Spares"
+  ];
+  
+  // Animation configuration
+  const config = {
+    displayTime: 2000,       // How long to display each phrase (2 seconds)
+    fadeTime: 500            // Transition time for fade in/out (0.5 seconds)
+  };
+  
+  let currentPhraseIndex = 0;
+  
+  // Add CSS for fade transitions and remove cursor
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    .fade-in {
+      animation: fadeIn ${config.fadeTime}ms ease forwards;
+    }
+    
+    .fade-out {
+      animation: fadeOut ${config.fadeTime}ms ease forwards;
+    }
+    
+    .typing-text {
+      border-right: none !important; /* Remove any border-right that might be creating cursor */
+    }
+    
+    /* Override any potential CSS creating a cursor effect */
+    .typing-text::after {
+      content: none !important;
+      display: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Function to cycle through phrases
+  function cyclePhrase() {
+    // Fade out current text
+    typingElement.classList.add('fade-out');
+    
+    // After fade out completes, change text and fade in
+    setTimeout(() => {
+      // Update to next phrase
+      currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+      typingElement.textContent = phrases[currentPhraseIndex];
+      
+      // Remove fade out and add fade in
+      typingElement.classList.remove('fade-out');
+      typingElement.classList.add('fade-in');
+      
+      // Remove fade-in class after animation completes
+      setTimeout(() => {
+        typingElement.classList.remove('fade-in');
+      }, config.fadeTime);
+      
+      // Schedule the next phrase change
+      setTimeout(cyclePhrase, config.displayTime);
+      
+    }, config.fadeTime);
+  }
+  
+  // Set initial phrase
+  typingElement.textContent = phrases[currentPhraseIndex];
+  typingElement.classList.add('fade-in');
+  
+  // Remove any classes that might be creating a cursor effect
+  typingElement.classList.remove('cursor', 'typing-cursor', 'blinking-cursor');
+  
+  // Remove fade-in class after animation completes
+  setTimeout(() => {
+    typingElement.classList.remove('fade-in');
+  }, config.fadeTime);
+  
+  // Start cycling after the first phrase has been displayed
+  setTimeout(cyclePhrase, config.displayTime);
+});
   </script>
   <script>
     // Simple animation for elements
