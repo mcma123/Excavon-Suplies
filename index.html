@@ -590,6 +590,14 @@
       }
     }
   </style>
+  <!-- Add EmailJS Script before closing head tag -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      // https://dashboard.emailjs.com/admin/account
+      emailjs.init('c7XhmDO2wG5PVvQwF');
+    })();
+  </script>
 </head>
 <body>
   <!-- Navigation -->
@@ -703,19 +711,21 @@
           </div>
         </div>
         <div class="contact-form animate">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Your Name">
-          </div>
-          <div class="form-group">
-            <input type="email" class="form-control" placeholder="Your Email">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Subject">
-          </div>
-          <div class="form-group">
-            <textarea class="form-control" placeholder="Your Message"></textarea>
-          </div>
-          <button type="submit" class="btn">Send Message</button>
+          <form id="contactForm" onsubmit="return sendEmail(event)">
+            <div class="form-group">
+              <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" id="message" placeholder="Your Message" required></textarea>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+          </form>
         </div>
       </div>
     </div>
@@ -869,6 +879,83 @@
         observer.observe(element);
       });
     });
+  </script>
+  <!-- Add before closing body tag -->
+  <script type="text/javascript">
+    function sendEmail(event) {
+      event.preventDefault();
+
+      const btn = event.target.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      // Log the form data
+      console.log('Sending email with data:', {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+      });
+
+      const templateParams = {
+        to_name: "Excavon Team",
+        from_name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value,
+        reply_to: document.getElementById('email').value,
+        to_email: 'info@excavonsupplies.co.za'  // Add recipient email
+      };
+
+      // Log the actual parameters being sent
+      console.log('Template parameters:', templateParams);
+
+      // Send email to the client (auto-reply)
+      emailjs.send('service_fcf621j', 'template_mrzv2oh', templateParams)
+        .then(function(response) {
+          console.log('Auto-reply sent successfully:', response);
+          // Now send the message to info@excavonsupplies.co.za
+          return emailjs.send('service_fcf621j', 'template_mrzv2oh', {
+            ...templateParams,
+            to_name: "Excavon Team",
+            subject: `New Contact Form Message: ${templateParams.subject}`,
+            message: `
+Name: ${templateParams.from_name}
+Email: ${templateParams.email}
+Subject: ${templateParams.subject}
+
+Message:
+${templateParams.message}
+            `,
+          });
+        })
+        .then(function(response) {
+          console.log('Notification email sent successfully:', response);
+          alert('Thank you! Your message has been sent successfully.');
+          document.getElementById('contactForm').reset();
+        })
+        .catch(function(error) {
+          console.error('FAILED...', error);
+          alert('Error sending message: ' + (error.text || 'Unknown error occurred. Please try again.'));
+        })
+        .finally(function() {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        });
+
+      return false;
+    }
+
+    // Add initialization success/failure logging
+    window.onload = function() {
+      try {
+        emailjs.init('c7XhmDO2wG5PVvQwF');
+        console.log('EmailJS initialized successfully');
+      } catch (error) {
+        console.error('EmailJS initialization failed:', error);
+      }
+    };
   </script>
 </body>
 </html>
