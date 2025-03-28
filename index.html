@@ -14,14 +14,45 @@
 
     /* Add this style for the typing animation */
     .typing-text {
-      display: inline-block;
+      display: block;
+      font-size: 2.2rem;
       color: var(--yellow);
-      font-weight: bold;
-      min-width: 10px;
-      position: relative;
+      margin-top: 0;
+      margin-bottom: 20px;
+      min-height: auto;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      line-height: 1.4;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
     }
 
-    .typing-text::after {
+    .sub-text {
+      display: block;
+      font-size: 1.8rem;
+      color: var(--white);
+      margin-bottom: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      line-height: 1.4;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+    }
+
+    .typing-text.visible,
+    .sub-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Remove cursor effect */
+    /*.typing-text::after {
       content: '|';
       position: absolute;
       right: -8px;
@@ -31,7 +62,8 @@
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
-    }
+    }*/
+
     :root {
       --yellow: #F2C700;
       --dark-gray: #3F3F3F;
@@ -562,8 +594,25 @@
 
     /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+
+    @keyframes fadeOut {
+      from { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+      to { 
+        opacity: 0; 
+        transform: translateY(-20px); 
+      }
     }
 
     .animate {
@@ -598,6 +647,8 @@
       emailjs.init('c7XhmDO2wG5PVvQwF');
     })();
   </script>
+  <!-- Add Google Fonts link in the beginning of body -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Navigation -->
@@ -616,10 +667,10 @@
   </div>
 
   <!-- Hero Section -->
- <section class="hero">
+  <section class="hero">
     <div class="hero-content">
-      <h1>Mining <span>Excellence</span> Through Quality <span class="typing-text"></span></h1>
-      
+      <div class="typing-text">Powering Mining Operations with Reliable Equipment, Safety Solutions, and Engineering Excellence.</div>
+      <div class="sub-text">Reliable PPE, engineering spares, lab reagents, and instrumentation—keeping your operations seamless.</div>
       <a href="#contact" class="btn">Get In Touch</a>
     </div>
   </section>
@@ -754,111 +805,34 @@
    document.addEventListener('DOMContentLoaded', function() {
   // Handle regular animated elements
   const animatedElements = document.querySelectorAll('.animate');
+  const typingElement = document.querySelector('.typing-text');
+  const subTextElement = document.querySelector('.sub-text');
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.animation = 'fadeIn 1s ease forwards';
+        if (entry.target.classList.contains('typing-text') || entry.target.classList.contains('sub-text')) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.style.animation = 'fadeIn 1s ease forwards';
+        }
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1 });
   
+  // Observe the typing text and sub-text elements
+  if (typingElement) {
+    observer.observe(typingElement);
+  }
+  if (subTextElement) {
+    observer.observe(subTextElement);
+  }
+  
+  // Observe other animated elements
   animatedElements.forEach(element => {
     observer.observe(element);
   });
-
-  // New fade animation for phrases instead of typing
-  const typingElement = document.querySelector('.typing-text');
-  const phrases = [
-    "Personal Protective Equipment (PPE)",
-    "Mechanical Engineering Spares",
-    "Laboratory Items & Reagents",
-    "Electrical Spares",
-    "Instrumentation Spares"
-  ];
-  
-  // Animation configuration
-  const config = {
-    displayTime: 2000,       // How long to display each phrase (2 seconds)
-    fadeTime: 500            // Transition time for fade in/out (0.5 seconds)
-  };
-  
-  let currentPhraseIndex = 0;
-  
-  // Add CSS for fade transitions and remove cursor
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    
-    .fade-in {
-      animation: fadeIn ${config.fadeTime}ms ease forwards;
-    }
-    
-    .fade-out {
-      animation: fadeOut ${config.fadeTime}ms ease forwards;
-    }
-    
-    .typing-text {
-      border-right: none !important; /* Remove any border-right that might be creating cursor */
-    }
-    
-    /* Override any potential CSS creating a cursor effect */
-    .typing-text::after {
-      content: none !important;
-      display: none !important;
-    }
-  `;
-  document.head.appendChild(style);
-  
-  // Function to cycle through phrases
-  function cyclePhrase() {
-    // Fade out current text
-    typingElement.classList.add('fade-out');
-    
-    // After fade out completes, change text and fade in
-    setTimeout(() => {
-      // Update to next phrase
-      currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
-      typingElement.textContent = phrases[currentPhraseIndex];
-      
-      // Remove fade out and add fade in
-      typingElement.classList.remove('fade-out');
-      typingElement.classList.add('fade-in');
-      
-      // Remove fade-in class after animation completes
-      setTimeout(() => {
-        typingElement.classList.remove('fade-in');
-      }, config.fadeTime);
-      
-      // Schedule the next phrase change
-      setTimeout(cyclePhrase, config.displayTime);
-      
-    }, config.fadeTime);
-  }
-  
-  // Set initial phrase
-  typingElement.textContent = phrases[currentPhraseIndex];
-  typingElement.classList.add('fade-in');
-  
-  // Remove any classes that might be creating a cursor effect
-  typingElement.classList.remove('cursor', 'typing-cursor', 'blinking-cursor');
-  
-  // Remove fade-in class after animation completes
-  setTimeout(() => {
-    typingElement.classList.remove('fade-in');
-  }, config.fadeTime);
-  
-  // Start cycling after the first phrase has been displayed
-  setTimeout(cyclePhrase, config.displayTime);
 });
   </script>
   <script>
